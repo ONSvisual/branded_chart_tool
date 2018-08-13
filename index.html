@@ -20,7 +20,7 @@
 <button id='saveButton'>Export my D3 visualization to PNG</button>
 </div>
 <div id="title"></div>
-<iframe id="viz"src="/Line/index.html" width= "475" height= "356" frameborder="0" onload="access()"></iframe>
+<iframe id="viz"src="https://www.ons.gov.uk/embed?uri=/economy/inflationandpriceindices/bulletins/consumerpriceinflation/sept2016/cc765147&notes=false&source=false&subtitle=false&title=false" width= "475" height= "356" frameborder="0" onload="access()"></iframe>
 
 </body>
 <script type="text/javascript">
@@ -41,14 +41,21 @@ function access() {
       .text('SVG title');
 
    var iframe = document.getElementById("viz");
+   console.log(iframe)
    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
-   console.log(innerDoc.body.getElementsByTagName('svg')[0]);
+   console.log(innerDoc.getElementsByClassName('section__content--static-markdown')[0].getElementsByClassName('embedded-chart')[0])
+   console.log(innerDoc.getElementsByClassName('embedded-chart')[0])
    var svg = innerDoc.body.getElementsByTagName('svg')[0];
-   var width = 300, height = 300;
+   var width = innerDoc.body.getElementsByTagName('svg')[0].getAttribute('width');
+   var height = innerDoc.body.getElementsByTagName('svg')[0].getAttribute('height');
+
+   // remove source
+   innerDoc.getElementById('source').remove()
+
 
    d3.select('#saveButton').on('click', function(){
    	var svgString = getSVGString(svg);
-     console.log(svgString)
+    console.log(svgString)
    	svgString2Image( svgString, 2*width, 2*height, 'png', save ); // passes Blob and filesize String to the callback
 
    	function save( dataBlob, filesize ){
@@ -158,26 +165,6 @@ function access() {
    }
 
 }
-
-// var iframeElementx = document.getElementById("viz"),
-//     iframeElementy = (iframeElementx.contentWindow || iframeElementx.contentDocument);
-//
-// console.log(iframeElementy.getElementById('svg'))
-    // iframeElementz = iframeElementy.document.body;
-//
-// var svg = d3.select(iframeElementz)
-// var width = 300, height = 300;
-
-// document.getElementById('viz').addEventListener('load',function(){
-//     var svg = document.getElementById('graphics').contentDocument
-//     console.log(svg)
-//     // do stuff, call functions, etc.
-//   })
-
-// Let's create a mock visualization
-
-// console.log(svg)
-// Set-up the export button
 
 </script>
 </html>
